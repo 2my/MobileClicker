@@ -16,45 +16,40 @@
 package no.antares.mobile.clicker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * @author tommy skodje
 */
 public class Main extends Activity {
 	private static final String TAG	= Main.class.getSimpleName();
-	private TextView notes	= null;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        notes = (TextView) findViewById( R.id.text_notes );
-        attachStepButtonListener( R.id.button_next, "+1" );
-        attachStepButtonListener( R.id.button_previous, "-1" );
+        // FixMe: QR-scan to get at connection
+        Button next = (Button) findViewById( R.id.button_start );
+        next.setOnClickListener(
+    		new OnClickListener() {
+		    	public void onClick(View v) {
+					Log.d( TAG, "Start button clicked!");
+					Intent i = new Intent( Main.this, PresenterRemote.class );
+					startActivity(i);
+		    	}
+	    	}
+        );
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
-    private void attachStepButtonListener( int buttonId, final String text ) {
-        Button next = (Button) findViewById( buttonId );
-        next.setOnClickListener(
-    		new OnClickListener() {
-		    	public void onClick(View v) {
-					Log.d( TAG, text + " button clicked!");
-					notes.setText( text );
-		    	}
-	    	}
-        );
-    };
 
 }
