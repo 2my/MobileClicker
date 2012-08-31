@@ -37,56 +37,36 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // FixMe: QR-scan to get at connection
         Button next = (Button) findViewById( R.id.button_start );
         next.setOnClickListener(
     		new OnClickListener() {
 		    	public void onClick(View v) {
-					Log.d( TAG, "Start button clicked!");
 					scanQRCode();
-					// go2presenter();
 		    	}
 	    	}
         );
     }
 
     public void scanQRCode() {
+		Log.d( TAG, "scanQRCode()");
+    	// @see http://code.google.com/p/zxing/wiki/GettingStarted
         IntentIntegrator integrator = new IntentIntegrator( this );
         integrator.initiateScan();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    	// @see http://code.google.com/p/zxing/wiki/GettingStarted
     	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-    	if (scanResult != null) {
-    		Log.d( TAG, scanResult.getContents() );
-    		go2presenter();
-    	}
+    	if (scanResult != null)
+    		go2presenter( scanResult.getContents() );
     }
 
-	private void go2presenter() {
-		Intent i = new Intent( Main.this, PresenterRemote.class );
-		startActivity(i);
+	private void go2presenter( String remoteUrl ) {
+		Log.d( TAG, "go2presenter(): " + remoteUrl );
+		Intent intent = new Intent( Main.this, PresenterRemote.class );
+		intent.putExtra( PresenterRemote.KEY_SERVER_URL, remoteUrl );
+		startActivity( intent );
 	}
-
-    /*
-    public Button.OnClickListener mScan = new Button.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent = new Intent( "com.google.zxing.client.android.SCAN" );
-            intent.putExtra( "com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE" );
-            startActivityForResult( intent, 0 );
-        }
-    };
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                // Handle successful scan
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-            }
-        }
-    }*/
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

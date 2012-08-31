@@ -27,14 +27,19 @@ import android.widget.TextView;
  * @author tommy skodje
 */
 public class PresenterRemote extends Activity {
+	static final String KEY_SERVER_URL	= "serverUrl";
+
 	private static final String TAG	= PresenterRemote.class.getSimpleName();
 	private TextView notes	= null;
+	private String url2server	= null;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.presenter_remote);
+        url2server	= getIntent().getStringExtra( KEY_SERVER_URL );
 
         notes = (TextView) findViewById( R.id.text_notes );
+        notes.setText( url2server );
         attachStepButtonListener( R.id.button_next, "+1" );
         attachStepButtonListener( R.id.button_previous, "-1" );
     }
@@ -45,7 +50,7 @@ public class PresenterRemote extends Activity {
     		new OnClickListener() {
 		    	public void onClick(View v) {
 					Log.d( TAG, text + " button clicked!");
-					notes.setText( text );
+					notes.setText( url2server + "\n" + text );
 		    	}
 	    	}
         );
