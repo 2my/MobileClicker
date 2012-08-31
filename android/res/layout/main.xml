@@ -1,14 +1,38 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:background="#FFF"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/button_next" />
+
+    <TextView
+        android:id="@+id/text_notes"
+        tools:context=".Main"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textSize="50dp"
+        android:gravity="center_vertical"
+        android:text="@string/hello_world" />
+        <!--
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".Main" />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        -->
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/button_previous"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="@string/button_previous" />
+
+</LinearLayout>
