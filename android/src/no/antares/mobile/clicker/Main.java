@@ -24,7 +24,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-/**
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+/** Startup activity connects to server and fires up the PresenterRemote Clicker Activity
  * @author tommy skodje
 */
 public class Main extends Activity {
@@ -40,12 +43,50 @@ public class Main extends Activity {
     		new OnClickListener() {
 		    	public void onClick(View v) {
 					Log.d( TAG, "Start button clicked!");
-					Intent i = new Intent( Main.this, PresenterRemote.class );
-					startActivity(i);
+					scanQRCode();
+					// go2presenter();
 		    	}
 	    	}
         );
     }
+
+    public void scanQRCode() {
+        IntentIntegrator integrator = new IntentIntegrator( this );
+        integrator.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+    	if (scanResult != null) {
+    		Log.d( TAG, scanResult.getContents() );
+    		go2presenter();
+    	}
+    }
+
+	private void go2presenter() {
+		Intent i = new Intent( Main.this, PresenterRemote.class );
+		startActivity(i);
+	}
+
+    /*
+    public Button.OnClickListener mScan = new Button.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent = new Intent( "com.google.zxing.client.android.SCAN" );
+            intent.putExtra( "com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE" );
+            startActivityForResult( intent, 0 );
+        }
+    };
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+        }
+    }*/
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

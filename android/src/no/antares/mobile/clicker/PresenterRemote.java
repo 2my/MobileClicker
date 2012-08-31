@@ -1,4 +1,4 @@
-/* Main.java
+/* PresenterRemote.java
    Copyright 2012 Tommy Skodje
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-/**
+/** Activity runs the Presentation Clicker screen (next / prev buttons and notes)
  * @author tommy skodje
 */
 public class PresenterRemote extends Activity {

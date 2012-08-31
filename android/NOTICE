@@ -1,3 +1,8 @@
     Tommys Mobile Clicker Android
     Copyright 2012 Tommy Skodje
 
+Included code and artifacts
+
+Barcode scanner is provided by "Zebra Crossing" http://code.google.com/p/zxing/
+I copied their code into package com.google.zxing.integration.android
+
