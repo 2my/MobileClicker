@@ -19,6 +19,10 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -27,8 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.lang.StringUtils;
-
 
 
 /** Startup method for MobileClicker server
@@ -36,13 +38,15 @@ import org.apache.commons.lang.StringUtils;
 */
 public class Main {
     private static boolean done	= false;
+    private static final int port	= 4567;
 
     /** Entry point */
-    public static void main(String[] args) {
-    	MessageChannel channel	= MessageChannel.openInbound( 4567 );
+    public static void main(String[] args) throws Exception {
+    	MessageChannel channel	= MessageChannel.openInbound( port );
     	QRCode qr	= new QRCode( 100, 100 );
-    	qr.generate( "utf 8 characters ¾¿Œ" );
-        SwingUtilities.invokeLater(new Runnable() {
+    	qr.generate( myIPAddress() + ":" + port );
+
+    	SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }
@@ -55,6 +59,30 @@ public class Main {
         	System.err.println( message );
         }
     }
+    /* private static void  getInterfaces() {
+        try {
+           Enumeration<?> e = NetworkInterface.getNetworkInterfaces();
+   
+           while(e.hasMoreElements()) {
+              NetworkInterface ni = (NetworkInterface) e.nextElement();
+              System.out.println("Net interface: "+ni.getName());
+   
+              Enumeration<?> e2 = ni.getInetAddresses();
+   
+              while (e2.hasMoreElements()){
+                 InetAddress ip = (InetAddress) e2.nextElement();
+                 System.out.println("IP address: "+ ip.toString());
+              }
+           }
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+     }*/
+
+	private static String myIPAddress() throws UnknownHostException {
+		String ip	= InetAddress.getLocalHost().getHostAddress();
+		return ip;
+	}
 
     /**  */
     private static void createAndShowGUI() {

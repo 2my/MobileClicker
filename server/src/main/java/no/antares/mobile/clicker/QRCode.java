@@ -3,11 +3,7 @@ package no.antares.mobile.clicker;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.Hashtable;
 
 import com.google.zxing.BarcodeFormat;
@@ -18,13 +14,14 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
-/* 
+/* Generates QR-code for a given string
 @see http://stackoverflow.com/questions/2489048/qr-code-encoding-and-decoding-using-zxing
 */
 public class QRCode {
     final static String charSetName	= "UTF-8";
 	// public static final String fileName = "/Users/tommyskodje/Downloads/TSK_QR_S.png";
 	public static final String fileName = "QR.png";
+	// TODO: use streams, not file
 
 	final int h;
     final int w;
@@ -36,7 +33,6 @@ public class QRCode {
 	}
 
 	public void generate( String text ) {
-	    // byte[] b = toBytes( "utf 8 characters ¾¿Œ", Charset.forName("UTF-8") );
 		byte[] b = text.getBytes( Charset.forName( charSetName ) );
 	
 	    try {
@@ -62,19 +58,6 @@ public class QRCode {
 	    } catch (UnsupportedEncodingException e) {
 	        System.out.println(e.getMessage());
 	    }
-	}
-
-	private static byte[] toBytes( String text, Charset charset ) {
-	    CharsetEncoder encoder = charset.newEncoder();
-	    byte[] b = null;
-	    try {
-	        // Convert a string to UTF-8 bytes in a ByteBuffer
-	        ByteBuffer bbuf = encoder.encode(CharBuffer.wrap( text ));
-	        b = bbuf.array();
-	    } catch (CharacterCodingException e) {
-	        System.err.println(e.getMessage());
-	    }
-		return b;
 	}
 
 }
