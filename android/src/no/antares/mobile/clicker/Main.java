@@ -16,7 +16,10 @@
 package no.antares.mobile.clicker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,19 +35,39 @@ import com.google.zxing.integration.android.IntentResult;
  */
 public class Main extends Activity {
 	private static final String TAG	= Main.class.getSimpleName();
+	private Button reconnect;
 
 	@Override public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		Button next = (Button) findViewById( R.id.button_start );
-		next.setOnClickListener(
+		reconnect = (Button) findViewById( R.id.button_last );
+		reconnect.setVisibility( View.GONE );
+
+		Button connect = (Button) findViewById( R.id.button_start );
+		connect.setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
 						scanQRCode();
 					}
 				}
+			);
+	}
+
+	@Override protected void onStart() {
+		super.onStart();
+		final String lastUrl	= fetchLastUrl();
+		Log.d( TAG, "fetched LastUrl: " + lastUrl );
+		if ( lastUrl != null ) {
+			reconnect.setVisibility( View.VISIBLE );
+			reconnect.setOnClickListener(
+					new OnClickListener() {
+						public void onClick(View v) {
+							go2presenter( lastUrl );
+						}
+					}
 				);
+		}
 	}
 
 	public void scanQRCode() {
@@ -57,8 +80,13 @@ public class Main extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// @see http://code.google.com/p/zxing/wiki/GettingStarted
 		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+		String remoteUrl	= null;
 		if (scanResult != null)
-			go2presenter( scanResult.getContents() );
+			remoteUrl	= scanResult.getContents();
+		if (remoteUrl != null) {
+			storeLastUrl( remoteUrl );
+			go2presenter( remoteUrl );
+		}
 	}
 
 	private void go2presenter( String remoteUrl ) {
@@ -66,6 +94,19 @@ public class Main extends Activity {
 		Intent intent = new Intent( Main.this, PresenterRemote.class );
 		intent.putExtra( PresenterRemote.KEY_SERVER_URL, remoteUrl );
 		startActivity( intent );
+	}
+
+	private String fetchLastUrl() {
+		SharedPreferences prefs	= getSharedPreferences( "AndroidClicker", Context.MODE_PRIVATE );
+		return prefs.getString( "last.url", null );
+	}
+
+	private void storeLastUrl( String remoteUrl ) {
+		Log.d( TAG, "storeLastUrl(): " + remoteUrl );
+		SharedPreferences prefs	= getSharedPreferences( "AndroidClicker", Context.MODE_PRIVATE );
+		Editor editor	= prefs.edit();
+		editor.putString( "last.url", remoteUrl );
+		editor.commit();
 	}
 
 	@Override public boolean onCreateOptionsMenu(Menu menu) {
