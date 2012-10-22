@@ -81,7 +81,7 @@ public class SocketChannel {
 			}
 			return reply.toString();
 		} catch (IOException e) {
-			Log.e( TAG, "send() couldn not get I/O for the connection to: " + host + port, e);
+			Log.e( TAG, "send() could not get I/O for the connection to: " + host + port, e);
 			return "ERROR";
 		} finally {
 			close(out);
