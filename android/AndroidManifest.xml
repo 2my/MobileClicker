@@ -15,7 +15,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Main"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,7 +25,9 @@
         </activity>
         <activity
             android:name=".PresenterRemote"
-            android:label="@string/title_activity_presenter_remote" >
+            android:label="@string/title_activity_presenter_remote"
+            android:screenOrientation="portrait"
+            >
         </activity>
     </application>
 
