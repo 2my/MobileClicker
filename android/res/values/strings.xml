@@ -6,6 +6,7 @@
 
     <string name="title_activity_main">Mobile Clicker Setup</string>
     <string name="button_start">Connect to server</string>
+    <string name="button_last">Reconnect to last server</string>
 
     <string name="title_activity_presenter_remote">Presenter Remote</string>
     <string name="button_next">-&gt;Next</string>
